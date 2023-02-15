@@ -29,15 +29,15 @@
                 {% for projeto in projetos %}
                 <div class="project">
                     <img
-                    src={{projeto.img}} 
+                    src={{projeto.icon_url}} 
                     alt="freefire-icon">
                 
                     <div class="content">
-                        <h3>{{projeto.title}}</h3>
-                        <p>{{projeto.category}}</p>
+                        <h3>{{projeto.nome_projeto}}</h3>
+                        <p>{{projeto.categoria}}</p>
     
                         <div class="description">
-                            {{projeto.description}}
+                            {{projeto.descricao_projeto}}
                         </div>
                         <a href="#">Ir para o projeto</a>
                     </div>

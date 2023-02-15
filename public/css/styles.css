@@ -8,6 +8,9 @@ body {
     margin: 0;
     height: 100%;
 }
+html{
+    height: 100%;
+}
 body.hideScroll {
     overflow: hidden;
 }
@@ -332,11 +335,13 @@ footer {
     top: 1rem;
     left: 50%;
     transform: translate(-50%, 50%);
-    display: flex;
-    padding: 0.5rem;
-    align-items: center;
     border-radius: .5rem;
+}
+.formSendedModal .topModalMsg{
+    display: flex;
+    align-items: center;
     gap: 1rem;
+    padding: .5rem;
 }
 .formSendedModal.erro{
     background-color: rgb(252, 86, 86);
@@ -344,15 +349,24 @@ footer {
 .formSendedModal.sucess{
     background-color: rgb(86, 252, 136);
 }
-.formSendedModal img{
+.formSendedModal .topModalMsg img{
     width: 2rem;
     height: auto;
 }
-.formSendedModal p {
+.formSendedModal .topModalMsg p {
     font-family: 'Kufam', cursive;
     font-weight: 800;
 }
 .formSendedModal.hide {
     opacity: 0;
     visibility: hidden;
+    transition: 600ms;
+}
+.formSendedModal .progressBar{
+    height: 4px;
+    background-color: #444647;
+    border-radius: .2rem;
+    position: relative;
+    bottom: 0.5px;
+    width: 100%;
 }

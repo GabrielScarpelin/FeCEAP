@@ -15,8 +15,7 @@ const initiateDB = ()=>{
     let db = new sqlite3.Database(__dirname+"/database/db.sqlite")
     db.each("SELECT * FROM projetos", (err, result)=>{
         if (result === undefined){
-            db.run("CREATE TABLE projetos (nome_projeto TEXT PRIMARY KEY, descricao_projeto TEXT, categoria TEXT, icon_url TEXT)")
-        
+            db.run("CREATE TABLE projetos (id INTEGER PRIMARY KEY AUTOINCREMENT,nome_projeto TEXT, descricao_projeto TEXT, categoria TEXT, icon_url TEXT)")
         }
     })
     return db
@@ -24,6 +23,7 @@ const initiateDB = ()=>{
 
 server.use(express.json())
 server.use(express.static('public'))
+initiateDB().close()
 const projetos = [
     {
         img: "https://cdn-icons-png.flaticon.com/512/3522/3522092.png",
@@ -48,22 +48,42 @@ const projetos = [
     },
 ];
 // rota padrão da aplicação /
-server.get("/", function(req, res){
+server.get("/", async function(req, res){
     const db = initiateDB()
-    const projetos2 = []
-    db.each("SELECT * FROM projetos", (err, row)=>{
-        if (!err){
-            projetos2.push(row)
-        }
+    const each = ()=> new Promise(function (resolve, reject){
+        db.all("SELECT * FROM projetos", (err, result)=>{
+            if (err){
+                reject(err)
+            }
+            else{
+                resolve(result)
+            }
+        })
     })
-    console.log(projetos2)
+    const projetos = await each()
     return res.render('index.html', {projetos})
 })
-server.get('/projects', (req, res)=>{
+server.get('/projects', async (req, res)=>{
+    const db = initiateDB()
+    const each = ()=> new Promise(function (resolve, reject){
+        db.all("SELECT * FROM projetos", (err, result)=>{
+            if (err){
+                reject(err)
+            }
+            else{
+                resolve(result)
+            }
+        })
+    })
+    const projetos = await each()
+    console.log(projetos)
     return res.render('projects.html', {projetos})
 })
 server.post('/newproject', (req, res, next)=>{
-    console.log(req.body.title)
+    const db = initiateDB()
+    db.run("INSERT INTO projetos (nome_projeto, descricao_projeto, categoria, icon_url) VALUES (?, ?, ?, ?)", [req.body.title, req.body.description, req.body.category, req.body.image])
+    db.close()
+    return res.send('OK')
 })
 
 
