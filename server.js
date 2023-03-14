@@ -24,7 +24,16 @@ const asyncGetAll = (db, query) => new Promise(function (resolve, reject) {
     })
 })
 
-
+const asyncGet = (db, query) => new Promise(function (resolve, reject){
+    db.get(query, (err, result)=>{
+        if (err){
+            reject(err)
+        }
+        else {
+            resolve(result)
+        }
+    })
+})
 
 
 server.use(express.json())
@@ -33,6 +42,7 @@ initiateDB().close()
 // rota padrão da aplicação /
 server.get("/", async function(req, res){
     const db = initiateDB()
+    
     const projetos = await asyncGetAll(db, "SELECT * FROM projetos")
     db.close()
     return res.render('index.html', {projetos})
@@ -54,8 +64,8 @@ server.post('/newproject', (req, res, next)=>{
 
 server.get("/project/:id", async (req, res, next) => {
     const db = initiateDB()
-    console.log(req.params.id)
-    const projeto = await asyncGetAll(db, `SELECT * FROM projetos WHERE id  = 1`)
+    const projeto = await asyncGet(db, `SELECT * FROM projetos WHERE id = ${req.params.id}`)
+    console.log(projeto)
     db.close()
     return res.render('project.html', {projeto})
 })
