@@ -1,15 +1,18 @@
 body {
     background: rgb(107,72,255);
-    background: linear-gradient(153deg, rgba(107,72,255,1) 0%, rgba(255,138,92,1) 35%, rgba(85,209,159,1) 100%);
+    background: linear-gradient(153deg, rgba(107,72,255,1) 0%, rgba(255,138,92,1) 35%, rgba(85,209,159,1) 100%), no-repeat;
     color: #25282b;
 
     font-family: 'Kufam', cursive;
 
     margin: 0;
+    padding: 0;
     height: 100%;
 }
 html{
-    height: 100%;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
 }
 body.hideScroll {
     overflow: hidden;
@@ -129,9 +132,11 @@ footer a {
     padding: 32px;
 }
 
+
+
 .project img {
     width: 80px;
-    height: 80px;
+    height: fit-content;
     margin-right: 32px;
 }
 
@@ -369,4 +374,7 @@ footer {
     position: relative;
     bottom: 0.5px;
     width: 100%;
+}
+.remove-btn:hover{
+    cursor: pointer;
 }

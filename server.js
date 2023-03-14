@@ -1,9 +1,6 @@
 const express = require("express")
 const nunjucks = require('nunjucks')
 const sqlite3 = require('sqlite3').verbose()
-const fs = require('fs')
-
-
 
 const server = express()
 
@@ -12,70 +9,39 @@ nunjucks.configure('views', {
     noCache: true
 })
 const initiateDB = ()=>{
-    let db = new sqlite3.Database(__dirname+"/database/db.sqlite")
-    db.each("SELECT * FROM projetos", (err, result)=>{
-        if (result === undefined){
-            db.run("CREATE TABLE projetos (id INTEGER PRIMARY KEY AUTOINCREMENT,nome_projeto TEXT, descricao_projeto TEXT, categoria TEXT, icon_url TEXT)")
-        }
-    })
+    const db = new sqlite3.Database(__dirname+"/database/db.sqlite")
+    db.run("CREATE TABLE IF NOT EXISTS projetos (id INTEGER PRIMARY KEY AUTOINCREMENT,nome_projeto TEXT, descricao_projeto TEXT, categoria TEXT, icon_url TEXT)")
     return db
 }
+const asyncGetAll = (db, query) => new Promise(function (resolve, reject) {
+    db.all(query, (err, result) => {
+        if (err) {
+            reject(err)
+        }
+        else {
+            resolve(result)
+        }
+    })
+})
+
+
+
 
 server.use(express.json())
 server.use(express.static('public'))
 initiateDB().close()
-const projetos = [
-    {
-        img: "https://cdn-icons-png.flaticon.com/512/3522/3522092.png",
-        title: 'O advento de battle royalle, um estudo sobre Free Fire',
-        category: "Administração",
-        description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam aliquid repellat tempora illum unde hic dolorum doloribus ipsum quibusdam",
-        url: "#"
-    },
-    {
-        img: "https://cdn-icons-png.flaticon.com/512/3057/3057735.png",
-        title: 'Por que a Terra NÃO é plana?',
-        category: "Ciências",
-        description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam aliquid repellat tempora illum unde hic dolorum doloribus ipsum quibusdam",
-        url: "#"
-    },
-    {
-        img: "https://cdn-icons-png.flaticon.com/512/5551/5551575.png",
-        title: 'Satélite caseiro',
-        category: "Engenharia",
-        description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam aliquid repellat tempora illum unde hic dolorum doloribus ipsum quibusdam",
-        url: "#"
-    },
-];
 // rota padrão da aplicação /
 server.get("/", async function(req, res){
     const db = initiateDB()
-    const each = ()=> new Promise(function (resolve, reject){
-        db.all("SELECT * FROM projetos", (err, result)=>{
-            if (err){
-                reject(err)
-            }
-            else{
-                resolve(result)
-            }
-        })
-    })
-    const projetos = await each()
+    const projetos = await asyncGetAll(db, "SELECT * FROM projetos")
+    db.close()
     return res.render('index.html', {projetos})
 })
 server.get('/projects', async (req, res)=>{
     const db = initiateDB()
-    const each = ()=> new Promise(function (resolve, reject){
-        db.all("SELECT * FROM projetos", (err, result)=>{
-            if (err){
-                reject(err)
-            }
-            else{
-                resolve(result)
-            }
-        })
-    })
-    const projetos = await each()
+    
+    const projetos = await asyncGetAll(db, "SELECT * FROM projetos")
+    db.close()
     console.log(projetos)
     return res.render('projects.html', {projetos})
 })
@@ -86,7 +52,28 @@ server.post('/newproject', (req, res, next)=>{
     return res.send('OK')
 })
 
+server.get("/project/:id", async (req, res, next) => {
+    const db = initiateDB()
+    console.log(req.params.id)
+    const projeto = await asyncGetAll(db, `SELECT * FROM projetos WHERE id  = 1`)
+    db.close()
+    return res.render('project.html', {projeto})
+})
 
+
+server.delete('/apagar/:id', (req, res)=>{
+    const db = initiateDB()
+    db.run(`DELETE from projetos where id = ${req.params.id}`, (runResult, err)=>{
+        if (err){
+            res.sendStatus(500)
+        }
+        else{
+            console.log(runResult)
+        }
+    })
+    db.close()
+    return res.send("OK")
+})
 
 server.listen(3000)
 // 1 - npm init -y (Criar projejo Node)

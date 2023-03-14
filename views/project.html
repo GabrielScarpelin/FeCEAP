@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>Projetos - FeCEAP 2020</title>
     <link href="https://fonts.googleapis.com/css2?family=Kufam:wght@400;600;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body id="page-projects">
     <div id="container">
         <header>
             <a href="/">
-                <img id="logo" src="FeCEAP-logoAlef2.svg" alt="FeCEAP-logo">
+                <img id="logo" src="/FeCEAP-logoAlef2.svg" alt="FeCEAP-logo">
     
             </a>
             <nav>
@@ -25,34 +25,23 @@
         </section>
     
         <main>
-            <section id="projects">
-                {% for projeto in projetos %}
                 <div class="project">
-                    <img
-                    src={{projeto.icon_url}} 
-                    alt="freefire-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5551/5551575.png" alt="freefire-icon">
                 
                     <div class="content">
-                        <h3>{{projeto.nome_projeto}}</h3>
-                        <p>{{projeto.categoria}}</p>
+                        <h3>Satélite caseiro</h3>
+                        <p>Engenharia</p>
     
                         <div class="description">
-                            {{projeto.descricao_projeto}}
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam aliquid repellat tempora illum unde hic dolorum doloribus ipsum quibusdam
                         </div>
-                        <a href="/project/{{projeto.id}}">Ir para o projeto</a>
                     </div>
                 </div>
-                {% endfor %}
-            </section>
         </main>
     
         <footer>
             Com ❤️ <a href="https://ceappedreira.org.br/" target="_blank">CEAP</a>
         </footer>
     </div>
-
-    <!-- MODAL -->
-    {% include "modal.html" %}
-    {% include "modalAdded.html" %}  
 </body>
 </html>

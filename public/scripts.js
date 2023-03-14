@@ -25,6 +25,7 @@ function enviarForms(){
             document.getElementsByClassName('progressBar').item(0).animate([{width: '100%', width: '0%'}], {duration: 1000})
             setInterval(()=>{
                 msgModal.classList.add('hide')
+                location.reload()
             }, 950)
         }
         else{
@@ -43,4 +44,13 @@ function enviarForms(){
     xml.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xml.send(JSON.stringify(entrada))
     
+}
+
+function apagarProjeto(id){
+    fetch(`http://localhost:3000/apagar/${id}`, {method: 'DELETE'}).then((resposta)=>{
+        console.log(resposta)
+        location.reload()
+    }).catch((err)=>{
+        console.log("Erro ao se conectar com o servidor" , err)
+    })
 }
