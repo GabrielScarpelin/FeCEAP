@@ -43,7 +43,8 @@ initiateDB().close()
 server.get("/", async function(req, res){
     const db = initiateDB()
     
-    const projetos = await asyncGetAll(db, "SELECT * FROM projetos")
+    const projetos = await asyncGetAll(db, "SELECT * FROM projetos LIMIT 3")
+
     db.close()
     return res.render('index.html', {projetos})
 })
