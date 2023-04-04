@@ -33,7 +33,12 @@
                     alt="freefire-icon">
                 
                     <div class="content">
-                        <h3>{{projeto.nome_projeto}}</h3>
+                        <div class="line" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                            <h3>{{projeto.nome_projeto}}</h3>
+                            <button class="remove-btn" onclick="apagarProjeto({{projeto.id}})">
+                                <img src="/lixeira.png" alt="" srcset="" style="width: 24px; height: auto;">
+                            </button>
+                        </div>
                         <p>{{projeto.categoria}}</p>
     
                         <div class="description">
